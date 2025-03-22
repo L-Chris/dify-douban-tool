@@ -7,16 +7,20 @@ import { z } from "@hono/zod-openapi";
 
 export const listGroupTopicsRoute = createRoute({
   method: "get",
-  path: "/group/:id/topics",
+  path: "/group/{id}/topics",
   operationId: "listGroupTopics",
   summary: "List group topics",
-  params: z.object({
-    id: z.string().openapi({
-      example: "732764",
-      description: "group id",
-    }),
-  }),
   request: {
+    params: z.object({
+      id: z.string().openapi({
+        param: {
+          name: "id",
+          in: "path",
+        },
+        example: "732764",
+        description: "group id",
+      }),
+    }),
     query: z.object({
       tag: z.string().optional().openapi({
         example: "111517",
@@ -50,15 +54,21 @@ export const listGroupTopicsRoute = createRoute({
 
 export const getGroupTopicDetailRoute = createRoute({
   method: "get",
-  path: "/group/topic/:id",
+  path: "/group/topic/{id}",
   operationId: "getGroupTopicDetail",
   summary: "Get group topic detail",
-  params: z.object({
-    id: z.string().openapi({
-      example: "123456",
-      description: "topic id",
+  request: {
+    params: z.object({
+      id: z.string().openapi({
+        param: {
+          name: "id",
+          in: "path",
+        },
+        example: "123456",
+        description: "topic id",
+      }),
     }),
-  }),
+  },
   responses: {
     200: {
       content: {
