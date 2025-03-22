@@ -1,6 +1,6 @@
 import dayjs from "dayjs"
 import crypto from 'node:crypto'
-import { Douban } from "./types.js"
+import { Douban } from "./types.ts"
 
 const apiKey = '0ac44ae016490db2204ce0a042db2916'
 
@@ -82,15 +82,15 @@ export async function getMovieReviews(params: {
 
 export async function getGroupTopics(params: {
   id: string
-  tags?: string[]
+  tag?: string
   from_date?: string
 }) {
   const res = await requestFrodoApi(`/group/${params.id}/topics`)
 
   let topics = (res.topics as Douban.Topic[] || []).filter(_ => !_.is_ad)
 
-  if (params.tags) {
-    topics = topics.filter(_ => _.topic_tags.some(tag => params.tags?.includes(tag.name)))
+  if (params.tag) {
+    topics = topics.filter(_ => _.topic_tags.some(tag => tag.name === params.tag))
   }
 
   if (params.from_date) {

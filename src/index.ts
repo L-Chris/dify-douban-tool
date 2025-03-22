@@ -1,62 +1,66 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
-// import { bearerAuth } from "hono/bearer-auth";
-import { Bindings } from "./bindings";
-import { searchBookRoute } from "./books";
-import { searchBooks } from "./api";
+import { OpenAPIHono } from '@hono/zod-openapi'
+import { Bindings } from './bindings'
+import { searchBookRoute } from './books'
+import { getGroupTopics, searchBooks } from './api'
+import { listGroupTopicsRoute } from './group'
 
-const app = new OpenAPIHono<{ Bindings: Bindings }>();
+const app = new OpenAPIHono<{ Bindings: Bindings }>()
 
-app.doc31("/doc", (c) => ({
+app.doc31('/doc', c => ({
   openapi: c.env.OPENAPI_VERSION,
   info: {
     version: c.env.TOOL_VERSION,
     title: c.env.TOOL_NAME,
-    description: c.env.TOOL_DESCRIPTION,
+    description: c.env.TOOL_DESCRIPTION
   },
-  servers: [{ url: new URL(c.req.url).origin }],
-}));
+  servers: [{ url: new URL(c.req.url).origin }]
+}))
 
-// app.use(
-//   bearerAuth({
-//     verifyToken: async (token, c) => {
-//       return token === c.env.TOKEN;
-//     },
-//   })
-// );
+app.openapi(searchBookRoute, async c => {
+  const q = c.req.query('q')
+  const isbn = c.req.query('isbn')
 
-app
-  .openapi(searchBookRoute, async (c) => {
-    const q = c.req.query("q");
-    const isbn = c.req.query("isbn");
+  if (!q && !isbn) {
+    return c.json({
+      error: 'Bad Request'
+    })
+  }
 
-    if (!q && !isbn) {
+  try {
+    let books = await searchBooks({ q, isbn })
+    if (!books) {
       return c.json({
-        error: "Bad Request",
-      });
+        error: 'Not Found'
+      })
     }
+    return c.json({
+      data: books,
+      error: null
+    })
+  } catch (e) {
+    return c.json({
+      error: 'Internal Server Error'
+    })
+  }
+})
 
-    try {
-      let books = await searchBooks({ q, isbn })
-      if (!books) {
-        return c.json({
-          error: "Not Found",
-        });
-      }
-      return c.json({
-        data: books,
-        error: null,
-      });
-    } catch (e) {
-      return c.json({
-        error: "Internal Server Error",
-      });
-    }
-  })
+app.openapi(listGroupTopicsRoute, async c => {
+  const id = c.req.param('id')
+  const tag = c.req.query('tag')
+  const from_date = c.req.query('from_date')
 
-// app.openAPIRegistry.registerComponent("securitySchemes", "Bearer", {
-//   type: "http",
-//   scheme: "bearer",
-// });
+  try {
+    const topics = await getGroupTopics({ id, tag, from_date })
 
+    return c.json({
+      data: topics,
+      error: null
+    })
+  } catch (e) {
+    return c.json({
+      error: 'Internal Server Error'
+    })
+  }
+})
 
-export default app;
+export default app
