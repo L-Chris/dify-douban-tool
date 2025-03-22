@@ -7,7 +7,7 @@ import { z } from "@hono/zod-openapi";
 
 export const listGroupTopicsRoute = createRoute({
   method: "get",
-  path: "/group/{id}/topics",
+  path: "/group/:id/topics",
   operationId: "listGroupTopics",
   summary: "List group topics",
   params: z.object({
@@ -50,7 +50,7 @@ export const listGroupTopicsRoute = createRoute({
 
 export const getGroupTopicDetailRoute = createRoute({
   method: "get",
-  path: "/group/topic/{id}",
+  path: "/group/topic/:id",
   operationId: "getGroupTopicDetail",
   summary: "Get group topic detail",
   params: z.object({
