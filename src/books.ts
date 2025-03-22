@@ -1,7 +1,7 @@
 import { createRoute } from "@hono/zod-openapi";
 import {
   BadRequestSchema,
-  ResponseSchema
+  BookSearchResponseSchema
 } from "./schema";
 import { z } from "@hono/zod-openapi";
 
@@ -26,7 +26,7 @@ export const searchBookRoute = createRoute({
     200: {
       content: {
         "application/json": {
-          schema: ResponseSchema,
+          schema: BookSearchResponseSchema,
         },
       },
       description: "Search book by name",

@@ -1,7 +1,8 @@
 import { createRoute } from "@hono/zod-openapi";
 import {
   BadRequestSchema,
-  ResponseSchema
+  GroupTopicsResponseSchema,
+  TopicDetailResponseSchema
 } from "./schema";
 import { z } from "@hono/zod-openapi";
 
@@ -36,7 +37,7 @@ export const listGroupTopicsRoute = createRoute({
     200: {
       content: {
         "application/json": {
-          schema: ResponseSchema,
+          schema: GroupTopicsResponseSchema,
         },
       },
       description: "List group topics",
@@ -73,7 +74,7 @@ export const getGroupTopicDetailRoute = createRoute({
     200: {
       content: {
         "application/json": {
-          schema: ResponseSchema,
+          schema: TopicDetailResponseSchema,
         },
       },
       description: "Get group topic detail",
