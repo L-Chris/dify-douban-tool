@@ -47,3 +47,34 @@ export const listGroupTopicsRoute = createRoute({
     },
   },
 });
+
+export const getGroupTopicDetailRoute = createRoute({
+  method: "get",
+  path: "/group/topic/{id}",
+  operationId: "getGroupTopicDetail",
+  summary: "Get group topic detail",
+  params: z.object({
+    id: z.string().openapi({
+      example: "123456",
+      description: "topic id",
+    }),
+  }),
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: ResponseSchema,
+        },
+      },
+      description: "Get group topic detail",
+    },
+    400: {
+      content: {
+        "application/json": {
+          schema: BadRequestSchema,
+        },
+      },
+      description: "Bad Request",
+    },
+  },
+});

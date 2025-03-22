@@ -1,8 +1,8 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { Bindings } from './bindings'
 import { searchBookRoute } from './books'
-import { getGroupTopics, searchBooks } from './api'
-import { listGroupTopicsRoute } from './group'
+import { getGroupTopics, searchBooks, getGroupTopicDetail } from './api'
+import { listGroupTopicsRoute, getGroupTopicDetailRoute } from './group'
 
 const app = new OpenAPIHono<{ Bindings: Bindings }>()
 
@@ -54,6 +54,23 @@ app.openapi(listGroupTopicsRoute, async c => {
 
     return c.json({
       data: topics,
+      error: null
+    })
+  } catch (e) {
+    return c.json({
+      error: 'Internal Server Error'
+    })
+  }
+})
+
+app.openapi(getGroupTopicDetailRoute, async c => {
+  const id = c.req.param('id')
+
+  try {
+    const detail = await getGroupTopicDetail({ id }, { cookie: c.env.COOKIE })
+
+    return c.json({
+      data: detail,
       error: null
     })
   } catch (e) {

@@ -101,10 +101,8 @@ export async function getGroupTopics(params: {
   return topics
 }
 
-export async function getGroupTopicDetail(params: {
-  id: string
-}) {
-  const res: Douban.TopicDetail = await requestFrodoApi(`/group/topic/${params.id}`)
+export async function getGroupTopicDetail({ id }: { id: string }, headers?: Record<string, string>) {
+  const res: Douban.TopicDetail = await requestFrodoApi(`/group/topic/${id}`, headers)
 
   return res
 }
@@ -141,7 +139,7 @@ const parseDoubanBook = (_: Douban.Book): Douban.Book => {
   }
 }
 
-const requestFrodoApi = async (url: string): Promise<any> => {
+const requestFrodoApi = async (url: string, headers?: Record<string, string>): Promise<any> => {
   const fullURL = 'https://frodo.douban.com/api/v2' + url;
   const date = dayjs().format('YYYYMMDD')
 
@@ -163,6 +161,7 @@ const requestFrodoApi = async (url: string): Promise<any> => {
   const req = await fetch(oUrl.toString(), {
     headers: {
       'user-agent': getUA(),
+      ...(headers || {}),
       // cookie: process.env.COOKIE || ''
     }
   })
