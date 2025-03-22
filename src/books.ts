@@ -11,7 +11,7 @@ export const searchBookRoute = createRoute({
   operationId: "searchBook",
   summary: "Search book by query or isbn",
   request: {
-    params: z.object({
+    query: z.object({
       q: z.string().optional().openapi({
         example: "The Great Gatsby",
         description: "search query",
