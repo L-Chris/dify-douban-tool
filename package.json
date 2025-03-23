@@ -8,6 +8,7 @@
     "@hono/zod-openapi": "^0.10.1",
     "dayjs": "^1.11.13",
     "hono": "^4.4.11",
+    "turndown": "^7.2.0",
     "url": "^0.11.4"
   },
   "devDependencies": {

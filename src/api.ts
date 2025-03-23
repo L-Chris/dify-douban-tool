@@ -1,6 +1,7 @@
 import dayjs from "dayjs"
 import crypto from 'node:crypto'
 import { Douban } from "./types.ts"
+import TurndownService from "turndown";
 
 const apiKey = '0ac44ae016490db2204ce0a042db2916'
 
@@ -103,6 +104,11 @@ export async function getGroupTopics(params: {
 
 export async function getGroupTopicDetail({ id }: { id: string }, headers?: Record<string, string>) {
   const res: Douban.TopicDetail = await requestFrodoApi(`/group/topic/${id}`, headers)
+
+  if (res?.id) {
+    const turndown = new TurndownService()
+    res.content = turndown.turndown(res.content)
+  }
 
   return res
 }
