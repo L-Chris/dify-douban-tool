@@ -71,7 +71,7 @@ export declare namespace Douban {
     is_ad: boolean
   }
 
-  interface TopicDetail {
+  interface TopicDetail extends Topic {
     like_count: number
     comments_count: number
     collections_count: number
