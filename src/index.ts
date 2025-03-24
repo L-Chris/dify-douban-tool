@@ -1,10 +1,15 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
-import { Bindings } from './bindings'
 import { searchBookRoute } from './books'
 import { getGroupTopics, searchBooks, getGroupTopicDetail } from './api'
 import { listGroupTopicsRoute, getGroupTopicDetailRoute } from './group'
 
-const app = new OpenAPIHono<{ Bindings: Bindings }>()
+const app = new OpenAPIHono<{ Bindings: {
+  COOKIE: string;
+  OPENAPI_VERSION: string;
+  TOOL_VERSION: string;
+  TOOL_NAME: string;
+  TOOL_DESCRIPTION: string;
+} }>()
 
 app.doc31('/doc', c => ({
   openapi: c.env.OPENAPI_VERSION,
